@@ -54,15 +54,16 @@ export default function AboutSection() {
               animate={{ opacity: 1, transform: 'translateY(0)' }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <div className="aspect-w-4 aspect-h-3 bg-gradient-to-br from-purple-DEFAULT to-blue-DEFAULT p-1">
-                <div className="w-full h-full bg-navy flex items-center justify-center">
-                  <img
-                    src={Profile}
-                    title="Mahmudur Rahman Headshot"
-                    alt="profile"
-                  />
-                </div>
+            <div className="aspect-w-4 aspect-h-3 bg-gradient-to-br from-purple-DEFAULT to-blue-DEFAULT p-1">
+              <div className="w-full h-full bg-navy flex items-center justify-center">
+                <img
+                  src={Profile}
+                  title="Mahmudur Rahman Headshot"
+                  alt="profile"
+                  onContextMenu={(e) => e.preventDefault()}
+                />
               </div>
+            </div>
               <div className="absolute -bottom-2 -right-2 w-64 h-20 bg-gradient-to-br from-purple-light to-blue-DEFAULT rounded-lg p-4">
                 <h2 className="text-lg text-white">Mahmudur Rahman</h2>
                 <h4 className="text-sm text-gray-300">Full Stack Developer</h4>
@@ -128,9 +129,11 @@ export default function AboutSection() {
           </div>
         </div>
 
-        <div className="mt-24 ">
+        <section className="mt-20" 
+          id="skills"
+          ref={sectionRef}>
           <motion.h3
-            className="text-2xl md:text-3xl font-bold mb-12 text-center text-white"
+            className="text-3xl md:text-3xl font-bold mb-12 text-center text-white"
             initial={{ opacity: 0, transform: 'translateY(30px)' }}
             animate={{ opacity: 1, transform: 'translateY(0)' }}
             transition={{ duration: 0.8, delay: 0.7 }}
@@ -166,7 +169,7 @@ export default function AboutSection() {
               </div>
             ))}
           </motion.div>
-        </div>
+        </section>
       </div>
     </section>
   )
