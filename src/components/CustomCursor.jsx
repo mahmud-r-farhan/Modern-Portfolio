@@ -1,30 +1,10 @@
 import React, { useEffect, useRef } from 'react';
-import Lenis from '@studio-freight/lenis';
 
 export default function CustomCursor() {
   const cursorOuterRef = useRef(null);
   const cursorInnerRef = useRef(null);
-  const lenisRef = useRef(null);
 
   useEffect(() => {
-    // Initialize Lenis smooth scrolling
-    lenisRef.current = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      direction: 'vertical',
-      gestureDirection: 'vertical',
-      smooth: true,
-      smoothTouch: false,
-      touchMultiplier: 2,
-    });
-
-    const raf = (time) => {
-      lenisRef.current?.raf(time);
-      requestAnimationFrame(raf);
-    };
-
-    requestAnimationFrame(raf);
-
     // Cursor position update function
     const updatePosition = (e) => {
       const { clientX, clientY } = e;
@@ -58,13 +38,16 @@ export default function CustomCursor() {
 
     // Handle link hover events
     const links = document.querySelectorAll('a, button, [role="button"]');
+    const handleLinkMouseEnter = () => {
+      cursorOuterRef.current?.classList.add('cursor-hover');
+    };
+    const handleLinkMouseLeave = () => {
+      cursorOuterRef.current?.classList.remove('cursor-hover');
+    };
+
     links.forEach((link) => {
-      link.addEventListener('mouseenter', () => {
-        cursorOuterRef.current?.classList.add('cursor-hover');
-      });
-      link.addEventListener('mouseleave', () => {
-        cursorOuterRef.current?.classList.remove('cursor-hover');
-      });
+      link.addEventListener('mouseenter', handleLinkMouseEnter);
+      link.addEventListener('mouseleave', handleLinkMouseLeave);
     });
 
     // Attach event listeners for cursor movement and interactions
@@ -77,23 +60,20 @@ export default function CustomCursor() {
     // Add no-cursor class to body
     document.body.classList.add('no-cursor');
 
-    // Cleanup event listeners and Lenis instance
+    // Cleanup
     return () => {
       document.removeEventListener('mousemove', updatePosition);
       document.removeEventListener('mousedown', handleMouseDown);
       document.removeEventListener('mouseup', handleMouseUp);
       document.removeEventListener('mouseleave', handleMouseLeave);
       document.removeEventListener('mouseenter', handleMouseEnter);
+
       links.forEach((link) => {
-        link.removeEventListener('mouseenter', () => {
-          cursorOuterRef.current?.classList.add('cursor-hover');
-        });
-        link.removeEventListener('mouseleave', () => {
-          cursorOuterRef.current?.classList.remove('cursor-hover');
-        });
+        link.removeEventListener('mouseenter', handleLinkMouseEnter);
+        link.removeEventListener('mouseleave', handleLinkMouseLeave);
       });
+
       document.body.classList.remove('no-cursor');
-      lenisRef.current?.destroy();
     };
   }, []);
 

@@ -1,26 +1,52 @@
-import React, { useEffect, useRef } from 'react'
-import Lenis from '@studio-freight/lenis'
+import React, { useEffect, useRef } from 'react';
+import { useScroll, useSpring } from 'framer-motion';
 
 export default function SmoothScroll({ children }) {
-  const lenisRef = useRef(null)
+  const containerRef = useRef(null);
+
+  // Smooth scroll damping using useSpring for scroll progress
+  const { scrollY } = useScroll({
+    container: containerRef,
+  });
+  const springScrollY = useSpring(scrollY, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
 
   useEffect(() => {
-    lenisRef.current = new Lenis({
-      direction: 'vertical',
-      gestureDirection: 'vertical',
-    })
+    // Smooth scroll for anchor links
+    const handleAnchorClick = (e) => {
+      const href = e.currentTarget.getAttribute('href');
+      if (href?.startsWith('#')) {
+        const target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          const targetPosition = target.getBoundingClientRect().top + window.scrollY - 100; // Offset for header
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth', // Native smooth scroll
+          });
+        }
+      }
+    };
 
-    const raf = (time) => {
-      lenisRef.current?.raf(time)
-      requestAnimationFrame(raf)
-    }
+    const anchors = document.querySelectorAll('a[href^="#"]');
+    anchors.forEach((anchor) =>
+      anchor.addEventListener('click', handleAnchorClick)
+    );
 
-    requestAnimationFrame(raf)
-
+    // Cleanup
     return () => {
-      lenisRef.current?.destroy()
-    }
-  }, [])
+      anchors.forEach((anchor) =>
+        anchor.removeEventListener('click', handleAnchorClick)
+      );
+    };
+  }, []);
 
-  return <>{children}</>
+  return (
+    <div ref={containerRef} style={{ height: '100%', overflowY: 'auto' }}>
+      {children}
+    </div>
+  );
 }
