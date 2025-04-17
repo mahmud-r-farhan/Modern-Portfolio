@@ -153,9 +153,7 @@ export default function ProjectsSection() {
                     src={project.image}
                     alt={project.title}
                     className="w-full h-full object-cover transform transition-transform duration-500 group-hover/image:scale-110"
-                    onError={(e) => {
-                      e.target.src = 'https://via.placeholder.com/600x400?text=Image+Not+Found';
-                    }}
+                   
                   />
                   <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/image:opacity-100 transition-opacity duration-300"></div>
                 </div>
