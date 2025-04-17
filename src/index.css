@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+.no-cursor {
+  cursor: none !important;
+}
+
+.cursor-hidden {
+  opacity: 0 !important;
+}
+
+.cursor-clicked {
+  transform: scale(0.8) !important;
+  border-color: #9b87f5 !important;
+}
+
+.cursor-hover {
+  transform: scale(1.5) !important;
+  background: rgba(155, 135, 245, 0.2) !important;
+  border-color: #9b87f5 !important;
+}
+
+.text-gradient {
+  background: linear-gradient(to right, #9b87f5, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.animate-slide-in {
+  animation: slideIn 1.5s ease-out forwards;
+}
+
+/* Ensure smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
